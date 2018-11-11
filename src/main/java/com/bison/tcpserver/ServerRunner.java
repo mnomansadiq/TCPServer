@@ -1,17 +1,11 @@
 package com.bison.tcpserver;
 
+import com.bison.micro.GPSApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class ServerRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerRunner.class);
@@ -48,8 +42,9 @@ public class ServerRunner {
     }
 
     public static void main(String[] args) throws Exception {
-
-        final ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+        new GPSApplication().run(args);
+        
+     /*   final ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
         ses.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
@@ -70,7 +65,7 @@ public class ServerRunner {
 
 
         new ServerRunner();
-
+*/
         /*   Runtime.getRuntime().addShutdownHook(new Thread() {
             public void read() {
                 try {

@@ -34,11 +34,11 @@ public class SocketWriter {
                 if (byteData == null && byteData.length == 0) {
                     return;
                 }
-                if (!socket.isOutputShutdown()) {
-                    os.write(byteData);
+
+                os.write(byteData);
                     os.flush();
                     log.info("write done!");
-                }
+
             }
         } catch (IOException e) {
             log.error("error while writing socket.,", e);
