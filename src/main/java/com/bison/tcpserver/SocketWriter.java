@@ -7,6 +7,9 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SocketWriter {
     private static final Logger log = LoggerFactory.getLogger(SocketWriter.class);
@@ -23,9 +26,28 @@ public class SocketWriter {
     private SocketWriter() {
     }
 
-    public void sendCommand(String tracker, Socket socket, String command) {
+    private List<Socket> getSocket(String trackerId) {
+        Map<String, Socket> socketMap = SocketManager.getInstance().getAllSockets();
+
+        return socketMap.entrySet().stream().filter(map -> trackerId.equalsIgnoreCase(map.getKey()))
+                .map(map -> map.getValue()).collect(Collectors.toList());
+
+    }
+
+    public void sendCommand(String tracker, String command) {
         try {
-            DataOutputStream os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            if (tracker == null || tracker == "") {
+                log.info("WTF where is tracker");
+            }
+            List<Socket> socketList = getSocket(tracker);
+            if (socketList.size() == 0) {
+                log.warn("No available socket for this tracker {}", tracker);
+                return;
+            }
+            if (socketList.size() > 1) {
+                log.warn("more than 1 active socket of same device. Close old one");
+            }
+            DataOutputStream os = new DataOutputStream(new BufferedOutputStream(socketList.get(0).getOutputStream()));
             log.info("start sending command " + command);
             if (command != null || command != "") {
                 command = ":" + command + "#";
@@ -34,7 +56,6 @@ public class SocketWriter {
                 if (byteData == null && byteData.length == 0) {
                     return;
                 }
-
                 os.write(byteData);
                     os.flush();
                     log.info("write done!");

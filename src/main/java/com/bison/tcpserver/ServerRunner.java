@@ -12,10 +12,10 @@ public class ServerRunner {
     private final int port = 9090;
     ServerSocket listener = null;
 
-    public ServerRunner() {
+    public ServerRunner(String port) {
         try {
             LOGGER.info("Server is waiting for Connections");
-            listener = new ServerSocket(port);
+            listener = new ServerSocket(Integer.parseInt(port));
             startConnectionListener();
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,31 +42,18 @@ public class ServerRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        new GPSApplication().run(args);
+        GPSApplication application = new GPSApplication();
+        application.run(args);
+        new ServerRunner(application.getConfiguration().getTcpServerPort());
         
-     /*   final ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-        ses.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                LOGGER.info("scheduler is running...");
-                String[] commands = {"123456F", "123456G"};
-                Map<String, Socket> socketsList = SocketManager.getInstance().getAllSockets();
-                socketsList.forEach((key, socket) -> {
-                    SocketWriter.getInstance().sendCommand(key, socket, commands[new Random().nextInt(commands.length)]);
-                });
-
-                Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        /* 
+          Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
                 for ( Thread t : threadSet){
                     System.out.println("Thread :"+t+":"+"state:"+t.getState());
                 }
-            }
-            
-        }, 10, 10, TimeUnit.SECONDS);
-
-
-        new ServerRunner();
-*/
-        /*   Runtime.getRuntime().addShutdownHook(new Thread() {
+          
+          
+          Runtime.getRuntime().addShutdownHook(new Thread() {
             public void read() {
                 try {
                     listener.close();
