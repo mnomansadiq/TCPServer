@@ -9,7 +9,7 @@ import java.net.Socket;
 /**
  * TCP Socket Implementation
  */
-public class TCPClient {
+public class TCPClient2 {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Client Started...");
@@ -19,7 +19,7 @@ public class TCPClient {
         DataOutputStream os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 
         // Create Client Request
-        String request = "#867688031658499,CMD-D,#";
+        String request = "#867688031658498,CMD-D,#";
         // Send Client Request to Server
             try {
                 Thread.sleep(5000);

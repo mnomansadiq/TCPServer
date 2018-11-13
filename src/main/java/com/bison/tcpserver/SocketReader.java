@@ -1,5 +1,6 @@
 package com.bison.tcpserver;
 
+import com.bison.httphandler.HttpRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ public class SocketReader {
                             SocketManager.getInstance().addSocketInfo(tracker, socket);
                         }
                         // add into database or further process it 
-                        log.info("Received Message = " + res);
+                        HttpRequestHandler.getInstance().setCommandResponse(tracker, res);
                     }
                     //  }
                 } catch (Exception e) {

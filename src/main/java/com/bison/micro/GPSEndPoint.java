@@ -1,7 +1,7 @@
 package com.bison.micro;
 
+import com.bison.httphandler.HttpRequestHandler;
 import com.bison.micro.model.TrackerInfo;
-import com.bison.tcpserver.SocketWriter;
 import com.codahale.metrics.annotation.Timed;
 
 import javax.ws.rs.GET;
@@ -33,7 +33,7 @@ public class GPSEndPoint {
     @Path("/sendCommand/{trackerId}/{command}")
     @Timed
     public Response sendCommand(@PathParam("trackerId") String trackerId, @PathParam("command") String command) {
-        SocketWriter.getInstance().sendCommand(trackerId, command);
-        return Response.ok().build();
+        String response = HttpRequestHandler.getInstance().runCommand(trackerId, command);
+        return Response.ok(response).build();
     }
 }

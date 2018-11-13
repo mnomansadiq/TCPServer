@@ -43,7 +43,9 @@ public class ServerRunner {
 
     public static void main(String[] args) throws Exception {
         GPSApplication application = new GPSApplication();
+       // running httpServer
         application.run(args);
+        // running TCPServer
         new ServerRunner(application.getConfiguration().getTcpServerPort());
         
         /* 
