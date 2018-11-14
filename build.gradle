@@ -30,8 +30,8 @@ dependencies {
     compile group: 'org.hornetq', name: 'hornetq-core', version: '2.2.5.Final'
     compile group: 'org.hornetq', name: 'hornetq-jms', version: '2.2.5.Final'
     compile group: 'org.hornetq', name: 'hornetq-logging', version: '2.2.5.Final'
-    compile group: 'org.hornetq', name: 'hornetq-transports', version: '2.0.0.GA'
-    compile group: 'org.jboss.netty', name: 'netty', version: '3.1.0.GA'
+    /* compile group: 'org.hornetq', name: 'hornetq-transports', version: '2.0.0.GA'*/
+    compile group: 'org.jboss.netty', name: 'netty', version: '3.2.10.Final'
     compile group: 'org.jboss.javaee', name: 'jboss-jms-api', version: '1.1.0.GA'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
