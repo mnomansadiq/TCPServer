@@ -1,7 +1,5 @@
-group 'com.bison'
-version '1.0-SNAPSHOT'
 
-def mainClassName = 'com.bison.tcpserver.ServerRunner'
+def mainClassName = 'com.bison.ServerRunner'
 
 buildscript {
     repositories {
@@ -29,16 +27,53 @@ repositories {
 dependencies {
     compile 'io.dropwizard:dropwizard-core:0.7.1'
     compile 'io.dropwizard:dropwizard-assets:0.7.1'
-   // compile 'org.slf4j:slf4j-simple:1.7.25'
+    compile group: 'org.hornetq', name: 'hornetq-core', version: '2.2.5.Final'
+    compile group: 'org.hornetq', name: 'hornetq-jms', version: '2.2.5.Final'
+    compile group: 'org.hornetq', name: 'hornetq-logging', version: '2.2.5.Final'
+    compile group: 'org.hornetq', name: 'hornetq-transports', version: '2.0.0.GA'
+    compile group: 'org.jboss.netty', name: 'netty', version: '3.1.0.GA'
+    compile group: 'org.jboss.javaee', name: 'jboss-jms-api', version: '1.1.0.GA'
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
 }
- 
+version = '0.1'
 
 shadowJar {
-    baseName = 'tcp-proxy'
+    mergeServiceFiles()
+    baseName = 'tcpServer'
     classifier = null
-    version = null
-     
+    version = version
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }
 
 build.finalizedBy shadowJar
+
+build.doLast {
+    copy {
+        from fileTree(".").include("HowToRun").files
+        into "build/libs/"
+    }
+    copy {
+        from fileTree("build/resources/main/").include("settings.yml").files
+        into "build/libs/"
+    }
+}
+
+/*
+task release(type: Copy, dependsOn: 'shadowJar') {
+    from 'src/main/conf'
+    into 'build/libs'
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    def dwVersion = '1.1.4'
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dwVersion
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+*/

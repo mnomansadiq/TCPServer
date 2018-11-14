@@ -1,0 +1,3 @@
+Place setting.yml file into same directory along with tcp-server.jar and then run the below command to start the server 
+
+>java -jar tcp-server.jar server settings.yml

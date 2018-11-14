@@ -1,6 +1,7 @@
-package com.bison.tcpserver;
+package com.bison;
 
 import com.bison.micro.GPSApplication;
+import com.bison.tcpserver.TCPServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
