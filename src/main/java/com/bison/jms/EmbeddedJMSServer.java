@@ -15,9 +15,10 @@ import org.hornetq.jms.server.impl.JMSServerManagerImpl;
 import javax.jms.*;
 import java.util.HashMap;
 import java.util.Map;
+
 public class EmbeddedJMSServer
 {
-    static void startServer()
+    private void startServer()
     {
         try
         {
@@ -39,8 +40,7 @@ public class EmbeddedJMSServer
         }
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public void setup(){
         //Start the server
         startServer();
 
@@ -92,11 +92,25 @@ public class EmbeddedJMSServer
 
             System.out.println("Received message: " + messageReceived.getText());
         }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+            
         finally
         {
             if (connection != null) {
-                connection.close();
+                try {
+                    connection.close();
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+    
+    public static void main(String[] args) throws Exception
+    {
+        new EmbeddedJMSServer().setup();
     }
 }

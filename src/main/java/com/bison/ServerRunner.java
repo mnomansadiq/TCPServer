@@ -1,5 +1,6 @@
 package com.bison;
 
+import com.bison.jms.EmbeddedJMSServer;
 import com.bison.micro.GPSApplication;
 import com.bison.tcpserver.TCPServer;
 import org.slf4j.Logger;
@@ -46,6 +47,10 @@ public class ServerRunner {
         GPSApplication application = new GPSApplication();
        // running httpServer
         application.run(args);
+
+        //testing jms
+        new EmbeddedJMSServer().setup();
+
         // running TCPServer
         new ServerRunner(application.getConfiguration().getTcpServerPort());
         
