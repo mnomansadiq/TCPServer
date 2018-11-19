@@ -1,6 +1,7 @@
 package com.bison.tcpserver;
 
 import com.bison.httphandler.HttpRequestHandler;
+import com.bison.jms.TrackerMessageProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ public class SocketReader {
                             SocketManager.getInstance().addSocketInfo(tracker, socket);
                         }
                         // add into database or further process it 
+                        TrackerMessageProducer.getInstance().addMessage(res);
                         HttpRequestHandler.getInstance().setCommandResponse(tracker, res);
                     }
                     //  }

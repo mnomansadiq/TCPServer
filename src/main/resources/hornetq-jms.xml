@@ -9,8 +9,9 @@
 		<entries>
 			<entry name="ConnectionFactory" />
 		</entries>
+        <consumer-window-size>0</consumer-window-size>
 	</connection-factory>
-	<queue name="exampleQueue">
-		<entry name="exampleQueue" />
+	<queue name="trackerRec">
+		<entry name="trackerRec" />
 	</queue>
 </configuration>

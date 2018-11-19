@@ -11,7 +11,6 @@ import java.net.ServerSocket;
 
 public class ServerRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerRunner.class);
-    private final int port = 9090;
     ServerSocket listener = null;
 
     public ServerRunner(String port) {
@@ -44,12 +43,15 @@ public class ServerRunner {
     }
 
     public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            LOGGER.error("Not provided configuration yml file");
+            return;
+        }
         GPSApplication application = new GPSApplication();
        // running httpServer
         application.run(args);
 
-        //testing jms
-        new EmbeddedJMSServer().setup();
+        new EmbeddedJMSServer(application.getConfiguration().getJmsHost(), application.getConfiguration().getJmsPort()).startServer();
 
         // running TCPServer
         new ServerRunner(application.getConfiguration().getTcpServerPort());

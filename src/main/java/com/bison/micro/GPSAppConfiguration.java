@@ -14,6 +14,22 @@ public class GPSAppConfiguration extends Configuration {
     @JsonProperty
     private String tcpServerPort;
 
+    @NotEmpty
+    @JsonProperty
+    private String jmsHost;
+
+    @NotEmpty
+    @JsonProperty
+    private String jmsPort;
+
+    public String getJmsHost() {
+        return jmsHost;
+    }
+
+    public String getJmsPort() {
+        return jmsPort;
+    }
+
     public String getTcpServerPort() {
         return tcpServerPort;
     }
