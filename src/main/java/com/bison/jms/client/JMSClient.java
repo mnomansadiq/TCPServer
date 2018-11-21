@@ -49,8 +49,8 @@ public class JMSClient {
                     if (messageReceived != null && messageReceived.getStringProperty(MESSAGE_PROPERTY_NAME) != null) {
                         System.out.println("Received JMS TextMessage:" + messageReceived.getStringProperty(MESSAGE_PROPERTY_NAME));
                         messageReceived.acknowledge();
-                    }
-
+                    } else
+                        System.out.println("no message available");
                     messageConsumer.close();
                     Thread.sleep(500);
                 }

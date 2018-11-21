@@ -35,7 +35,7 @@ public class TrackerMessageProducer {
             coreSession.close();    
             
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error while creating queue, ", e);
         }
     }
 
@@ -54,7 +54,7 @@ public class TrackerMessageProducer {
                     session = sf.createSession(true, true);
 
                 ClientProducer producer = session.createProducer(JMS_QUEUE_NAME);
-                ClientMessage message = session.createMessage(false);
+                ClientMessage message = session.createMessage(true);
 
                 message.putStringProperty(MESSAGE_PROPERTY_NAME, record);
                 System.out.println("Sending JMS message.");
