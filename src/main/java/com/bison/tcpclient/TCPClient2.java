@@ -21,37 +21,21 @@ public class TCPClient2 {
         // Create Client Request
         String request = "#867688031658498,CMD-D,#";
         // Send Client Request to Server
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         send(os, request.getBytes());
         System.out.println("Data sent to Server ; Message = " + request);
-
         try {
+            int counter = 0;
             while (true) {
-                int count = is != null ? is.available() : 0;
-                if (count > 0) {
-                    byte[] bs = new byte[count];
-                    is.read(bs);
-                    StringBuilder bufferedReader = new StringBuilder();
-                    for (byte b : bs) {
-                        char c = (char) b;
-                        bufferedReader.append(c);
-                    }
-                    if (bufferedReader != null || bufferedReader.toString() != "") {
-                        System.out.println(bufferedReader.toString());
-                        request = request.concat(bufferedReader.toString());
-                        send(os, request.getBytes());
+
+                request = request + " " + counter;
+                send(os, request.getBytes());
                         System.out.println("Data sent to Server ; Message = " + request);
-                    }
-                }
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                counter++;
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());

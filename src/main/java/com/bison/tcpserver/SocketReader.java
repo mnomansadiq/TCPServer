@@ -49,7 +49,8 @@ public class SocketReader {
                         if (SocketManager.getInstance().getSocketInfo(tracker) == null) {
                             SocketManager.getInstance().addSocketInfo(tracker, socket);
                         }
-                        // add into database or further process it 
+                        // add into database or JMS for further process it 
+                        log.info("before adding message to JMS: {}", res);
                         TrackerMessageProducer.getInstance().addMessage(res);
                         HttpRequestHandler.getInstance().setCommandResponse(tracker, res);
                     }
@@ -58,11 +59,6 @@ public class SocketReader {
                     e.printStackTrace();
                     continueRead = false;
                     SocketManager.getInstance().removeSocketInfo(tracker);
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         } catch (IOException e) {

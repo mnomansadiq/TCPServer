@@ -1,6 +1,5 @@
 package com.bison.jms;
 
-import org.hornetq.api.core.HornetQException;
 import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.core.client.*;
 import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
@@ -16,6 +15,7 @@ public class TrackerMessageProducer {
     private static final String MESSAGE_PROPERTY_NAME = "trackerUpdate";
 
     private ClientSessionFactory sf = null;
+    private ClientSession session = null;
     public static volatile TrackerMessageProducer instance = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackerMessageProducer.class);
 
@@ -30,9 +30,10 @@ public class TrackerMessageProducer {
 
             ServerLocator serverLocator = HornetQClient.createServerLocatorWithoutHA(new TransportConfiguration(NettyConnectorFactory.class.getName(), map));
             sf = serverLocator.createSessionFactory();
-            ClientSession coreSession = sf.createSession(false, false, false);
-
+            ClientSession coreSession = sf.createSession();
             coreSession.createQueue(JMS_QUEUE_NAME, JMS_QUEUE_NAME, true);
+            coreSession.close();    
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,25 +48,29 @@ public class TrackerMessageProducer {
     }
 
     public void addMessage(String record) {
-        ClientSession session = null;
         try {
             if (sf != null) {
-                session = sf.createSession();
-                ClientProducer producer = session.createProducer(JMS_QUEUE_NAME);
+                if (session == null || session.isClosed())
+                    session = sf.createSession(true, true);
 
+                ClientProducer producer = session.createProducer(JMS_QUEUE_NAME);
                 ClientMessage message = session.createMessage(false);
+
                 message.putStringProperty(MESSAGE_PROPERTY_NAME, record);
                 System.out.println("Sending JMS message.");
                 producer.send(message);
+                message.acknowledge();
             }
         } catch (Exception e) {
             LOGGER.error("Error while adding message by producer.", e);
-        } finally {
-            try {
-                session.close();
-            } catch (HornetQException e) {
-                LOGGER.error("Error while closing producer session,", e);
-            }
         }
+//        finally {
+//            try {
+//                session.close();
+//                instance = null;
+//            } catch (HornetQException e) {
+//                LOGGER.error("Error while closing producer session,", e);
+//            }
+        //   }
     }
 }

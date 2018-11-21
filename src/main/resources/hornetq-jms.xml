@@ -10,6 +10,7 @@
 			<entry name="ConnectionFactory" />
 		</entries>
         <consumer-window-size>0</consumer-window-size>
+        <connection-ttl>-1</connection-ttl>
 	</connection-factory>
 	<queue name="trackerRec">
 		<entry name="trackerRec" />

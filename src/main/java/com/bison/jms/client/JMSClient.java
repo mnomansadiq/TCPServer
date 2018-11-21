@@ -39,18 +39,20 @@ public class JMSClient {
         ClientSession session = null;
         try {
             if (sf != null) {
-                session = sf.createSession();
-
-                ClientConsumer messageConsumer = session.createConsumer(JMS_QUEUE_NAME);
-                session.start();
+                session = sf.createSession(true, true);
 
                 while (true) {
+                    ClientConsumer messageConsumer = session.createConsumer(JMS_QUEUE_NAME);
+                    session.start();
+
                     ClientMessage messageReceived = messageConsumer.receive(1000);
-                    if (messageReceived != null && messageReceived.getStringProperty(MESSAGE_PROPERTY_NAME) != null)
+                    if (messageReceived != null && messageReceived.getStringProperty(MESSAGE_PROPERTY_NAME) != null) {
                         System.out.println("Received JMS TextMessage:" + messageReceived.getStringProperty(MESSAGE_PROPERTY_NAME));
-              
-              
-              Thread.sleep(5000);
+                        messageReceived.acknowledge();
+                    }
+
+                    messageConsumer.close();
+                    Thread.sleep(500);
                 }
             }
         } catch (Exception e) {
