@@ -33,7 +33,7 @@ public class EmbeddedJMSServer
             FileConfiguration configuration = new FileConfiguration();
             configuration.setConfigurationUrl("hornetq-configuration.xml");
             configuration.start();
-            configuration.setPersistenceEnabled(false);
+            configuration.setPersistenceEnabled(true);
             configuration.setSecurityEnabled(false);
 
             Map<String, Object> map = new HashMap<>();
