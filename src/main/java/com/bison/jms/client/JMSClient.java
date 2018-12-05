@@ -22,19 +22,43 @@ public class JMSClient {
     private String hostPort = "5445";
 
     public JMSClient() {
+
+    }
+
+    private boolean connect() {
+        boolean isConnect = false;
         try {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("host", hostName);
             map.put("port", hostPort);
-
             ServerLocator serverLocator = HornetQClient.createServerLocatorWithoutHA(new TransportConfiguration(NettyConnectorFactory.class.getName(), map));
             sf = serverLocator.createSessionFactory();
-
+            isConnect = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return isConnect;
     }
 
+    public void connectAndReadJMS() {
+        boolean retry = false;
+        while (!retry) {
+            retry = connect();
+            if (!retry) {
+                try {
+                    Thread.sleep(3000);
+                    LOGGER.info("trying to reconnect");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        readMessage();
+    }
+    
+    
+    
     public void readMessage() {
         ClientSession session = null;
         try {
@@ -60,6 +84,7 @@ public class JMSClient {
         } finally {
             try {
                 session.close();
+                connectAndReadJMS();
             } catch (HornetQException e) {
                 LOGGER.error("Error while closing producer session,", e);
             }
@@ -67,6 +92,6 @@ public class JMSClient {
     }
 
     public static void main(String z[]) {
-        new JMSClient().readMessage();
+        new JMSClient().connectAndReadJMS();
     }
 }
