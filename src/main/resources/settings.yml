@@ -9,8 +9,11 @@ server:
       port: 9099
 
 tcpServerPort: 9090
+
 jmsHost: 127.0.0.1
 jmsPort: 5445
+jmsQueueName: trackerQueue
+jmsQueueRecordKey: trackerUpdate
 
 logging:
   loggers:

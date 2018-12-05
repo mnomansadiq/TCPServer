@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JMSClient {
-    private static final String JMS_QUEUE_NAME = "trackerRec";
+    private static final String JMS_QUEUE_NAME = "trackerQueue";
     private static final String MESSAGE_PROPERTY_NAME = "trackerUpdate";
 
     private ClientSessionFactory sf = null;

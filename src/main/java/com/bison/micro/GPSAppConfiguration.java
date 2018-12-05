@@ -21,6 +21,14 @@ public class GPSAppConfiguration extends Configuration {
     @NotEmpty
     @JsonProperty
     private String jmsPort;
+    
+    @NotEmpty
+    @JsonProperty
+    private String jmsQueueName;
+
+    @NotEmpty
+    @JsonProperty
+    private String jmsQueueRecordKey;
 
     public String getJmsHost() {
         return jmsHost;
@@ -35,6 +43,13 @@ public class GPSAppConfiguration extends Configuration {
     }
     public String getTemplate() {
         return template;
+    }
+    public String getJmsQueueName() {
+        return jmsQueueName;
+    }
+
+    public String getJmsQueueRecordKey() {
+        return jmsQueueRecordKey;
     }
 
 }

@@ -10,10 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TrackerMessageProducer {
-
-    private static final String JMS_QUEUE_NAME = "trackerRec";
-    private static final String MESSAGE_PROPERTY_NAME = "trackerUpdate";
-
+    private String queueName;
+    private String trackerRecordKey;
+    
     private ClientSessionFactory sf = null;
     private ClientSession session = null;
     public static volatile TrackerMessageProducer instance = null;
@@ -22,8 +21,11 @@ public class TrackerMessageProducer {
     private TrackerMessageProducer() {
     }
 
-    protected void setupProducer(String hostName, String hostPort) {
+    protected void setupProducer(String hostName, String hostPort, String queueName, String trackerRecordKey) {
         try {
+            this.queueName = queueName;
+            this.trackerRecordKey = trackerRecordKey;
+                    
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("host", hostName);
             map.put("port", hostPort);
@@ -31,7 +33,7 @@ public class TrackerMessageProducer {
             ServerLocator serverLocator = HornetQClient.createServerLocatorWithoutHA(new TransportConfiguration(NettyConnectorFactory.class.getName(), map));
             sf = serverLocator.createSessionFactory();
             ClientSession coreSession = sf.createSession();
-            coreSession.createQueue(JMS_QUEUE_NAME, JMS_QUEUE_NAME, true);
+            coreSession.createQueue(queueName, queueName, true);
             coreSession.close();    
             
         } catch (Exception e) {
@@ -53,10 +55,10 @@ public class TrackerMessageProducer {
                 if (session == null || session.isClosed())
                     session = sf.createSession(true, true);
 
-                ClientProducer producer = session.createProducer(JMS_QUEUE_NAME);
+                ClientProducer producer = session.createProducer(queueName);
                 ClientMessage message = session.createMessage(true);
 
-                message.putStringProperty(MESSAGE_PROPERTY_NAME, record);
+                message.putStringProperty(trackerRecordKey, record);
                 System.out.println("Sending JMS message.");
                 producer.send(message);
                 message.acknowledge();

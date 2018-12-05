@@ -51,7 +51,7 @@ public class ServerRunner {
        // running httpServer
         application.run(args);
 
-        new EmbeddedJMSServer(application.getConfiguration().getJmsHost(), application.getConfiguration().getJmsPort()).startServer();
+        new EmbeddedJMSServer(application.getConfiguration().getJmsHost(), application.getConfiguration().getJmsPort(),application.getConfiguration().getJmsQueueName(),application.getConfiguration().getJmsQueueRecordKey()).startServer();
 
         // running TCPServer
         new ServerRunner(application.getConfiguration().getTcpServerPort());

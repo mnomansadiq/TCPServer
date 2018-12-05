@@ -19,11 +19,15 @@ public class EmbeddedJMSServer
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJMSServer.class);
     private String jmsHostName;
     private String jmsHostPort;
+    private String queueName;
+    private String trackerRecordKey;
 
-    public EmbeddedJMSServer(String jmsHostName, String jmsHostPort) {
+    public EmbeddedJMSServer(String jmsHostName, String jmsHostPort, String queueName, String trackerRecordKey) {
         
         this.jmsHostName = jmsHostName;
         this.jmsHostPort = jmsHostPort;
+        this.queueName = queueName;
+        this.trackerRecordKey = trackerRecordKey;
     }
 
     public void startServer()
@@ -64,7 +68,7 @@ public class EmbeddedJMSServer
     }
 
     private void setupProducer() {
-        TrackerMessageProducer.getInstance().setupProducer(this.jmsHostName, this.jmsHostPort);
+        TrackerMessageProducer.getInstance().setupProducer(this.jmsHostName, this.jmsHostPort, this.queueName, this.trackerRecordKey);
         
     }
 }
