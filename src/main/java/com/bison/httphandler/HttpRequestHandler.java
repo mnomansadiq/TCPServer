@@ -28,13 +28,13 @@ public class HttpRequestHandler {
         logger.info("Placing call for " + trackerId);
         SocketWriter.getInstance().sendCommand(trackerId, cmd);
 
-        logger.info("Going into sleep for " + trackerId);
+        logger.info("Going to sleep for " + trackerId);
         synchronized (trackerId) {
             try {
                 requestContainer.put(trackerId, new RequestLocker(trackerId, null));
                 trackerId.wait(10000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error("error while running command, ", e);
             }
         }
         RequestLocker after = requestContainer.remove(trackerId);
@@ -49,7 +49,7 @@ public class HttpRequestHandler {
                 result.trackerId.notify();
             }
         } else {
-            logger.warn("Skipping a unknow response from tracker at httpsRequestHandler {}, respone:{}", id, res);
+            logger.warn("Skipping a unknown response from tracker at httpsRequestHandler {}, respone:{}", id, res);
         }
     }
 }

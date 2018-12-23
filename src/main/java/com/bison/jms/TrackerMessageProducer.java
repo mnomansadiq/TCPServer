@@ -1,5 +1,6 @@
 package com.bison.jms;
 
+import org.hornetq.api.core.SimpleString;
 import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.core.client.*;
 import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
@@ -33,9 +34,11 @@ public class TrackerMessageProducer {
             ServerLocator serverLocator = HornetQClient.createServerLocatorWithoutHA(new TransportConfiguration(NettyConnectorFactory.class.getName(), map));
             sf = serverLocator.createSessionFactory();
             ClientSession coreSession = sf.createSession();
-            coreSession.createQueue(queueName, queueName, true);
-            coreSession.close();    
-            
+            ClientSession.QueueQuery queueQuery = coreSession.queueQuery(new SimpleString(queueName));
+            if (!queueQuery.isExists()) {
+                coreSession.createQueue(queueName, queueName, true);
+                coreSession.close();
+            }
         } catch (Exception e) {
             LOGGER.error("Error while creating queue, ", e);
         }
